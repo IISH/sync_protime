@@ -19,8 +19,6 @@ require_once dirname(__FILE__) . "/syncprotimemysql.inc.php";
 // connect to database (target databases)
 $dbConn = new class_pdo( $databases['staff'] );
 $dbTimecard = new class_pdo( $databases['timecard'] );
-//
-$targetDatabases = array($dbConn, $dbTimecard);
 
 // connect to database (source database)
 $dbProtime = new class_pdo( $databases['protime'] );

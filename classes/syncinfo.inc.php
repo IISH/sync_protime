@@ -5,9 +5,7 @@
 class SyncInfo {
 	private static $settings_table = 'website_syncinfo';
 
-	public static function save( $setting_name, $type, $value ) {
-	    global $targetDatabases;
-
+	public static function save( $setting_name, $type, $value, $targetDatabases ) {
 		$settingsTable = self::$settings_table;
 
 		foreach ( $targetDatabases as $db ) {
@@ -16,7 +14,13 @@ class SyncInfo {
 				$stmt = $db->getConnection()->prepare($query);
 				$stmt->execute();
 				if ( $row = $stmt->fetch() ) {
-					$query = "UPDATE $settingsTable SET $type='" . addslashes($value) . "' WHERE property='" . $setting_name . "' ";
+					// dirty
+					$extra = '';
+					if ( $type == 'start' ) {
+						$extra = ", end='' ";
+					}
+
+					$query = "UPDATE $settingsTable SET $type='" . addslashes($value) . "' $extra WHERE property='" . $setting_name . "' ";
 					$stmt = $db->getConnection()->prepare($query);
 					$stmt->execute();
 				}
@@ -26,6 +30,7 @@ class SyncInfo {
 					$stmt->execute();
 				}
 			}
+//echo $query . ' +++<br>';
 		}
 	}
 
