@@ -7,10 +7,25 @@ checkCronKey();
 // show time
 echo "Start time: " . date("Y-m-d H:i:s") . "<br>\n";
 
+//
+$persnr = getPersnr();
+
+//
+if ( $persnr != '' ) {
+	$maxMonth = 12;
+	$extraCriterium = " AND PERSNR='$persnr' ";
+} else {
+	$maxMonth = 3;
+	$extraCriterium = '';
+}
+
+//
+$startDate = date("Ymd", mktime(0, 0, 0, date("m")-$maxMonth, 1, date("Y")));
+
 // sync
 $sync = new SyncProtime2Pdo();
 $sync->setSourceTable("PR_MONTH");
-$sync->setSourceCriterium(" BOOKDATE>='" . date("Ymd", mktime(0, 0, 0, date("m")-3, 1, date("Y"))) . "' ");
+$sync->setSourceCriterium(" BOOKDATE>='" . $startDate . "' " . $extraCriterium);
 $sync->setTargetDatabases(array($dbTimecard));
 $sync->setTargetTable("protime_pr_month");
 $sync->setPrimaryKey("PR_KEY");

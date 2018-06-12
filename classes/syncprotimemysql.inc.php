@@ -131,7 +131,7 @@ class SyncProtime2Pdo
 		SyncInfo::save($this->getTargetTable(), 'counter', $this->counter, $this->getTargetDatabases());
 
 		// remove deleted records
-		$query = "DELETE FROM " . $this->targetTable . " WHERE sync_state=2 ";
+		$query = "DELETE FROM " . $this->targetTable . " WHERE sync_state=2 AND " . $this->getSourceCriterium();
        	$this->executeQuery($query, $this->getTargetDatabases());
 
 		// save sync last run
