@@ -97,7 +97,7 @@ class SyncProtime2Pdo
 		global $dbProtime, $dbConn, $dbTimecard;
 
 		echo "Sync " . $this->sourceTable . " (KNAW) -> " . $this->targetTable . " (IISG)<br>";
-		SyncInfo::save($this->getTargetTable(), 'start', date("Y-m-d H:i:s"), array($dbConn, $dbTimecard));
+		SyncInfo::save($this->getTargetTable(), 'start', date("Y-m-d H:i:s"), $this->getTargetDatabases());
 
 		// set records as being updated
 		if ($this->sourceCriterium != '') {
@@ -110,7 +110,7 @@ class SyncProtime2Pdo
        	$this->executeQuery($query, $this->getTargetDatabases());
 
 		// save counter in table
-		SyncInfo::save($this->getTargetTable(), 'counter', '-', array($dbConn, $dbTimecard));
+		SyncInfo::save($this->getTargetTable(), 'counter', '-', $this->getTargetDatabases());
 
 		//
 		$query = "SELECT * FROM " . $this->sourceTable;
